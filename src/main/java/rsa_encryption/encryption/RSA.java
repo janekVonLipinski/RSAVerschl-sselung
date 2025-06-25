@@ -32,9 +32,31 @@ public class RSA {
 
         int n = prime1 * prime2;
         int phi = (prime1 - 1) * (prime2 - 1);
+        int e = getE(phi);
+        int d = inverse.getMultiplicativeInverse();
 
+        Key privateKey = new Key(n, d);
+        Key publicKey = new Key(n, e);
+        this.privateKey = privateKey;
+        this.publicKey = publicKey;
+    }
+
+    public int encrypt(int dataToEncrypt) {
+        int n = publicKey.getN();
+        int e = publicKey.getEOrD();
+
+        return (int) Math.pow(dataToEncrypt, e) % n;
+    }
+
+    public int decrypt(int dataToEncrypt) {
+        int n = privateKey.getN();
+        int d = privateKey.getEOrD();
+
+        return (int) Math.pow(dataToEncrypt, d) % n;
+    }
+
+    private int getE(int phi) {
         int e;
-
         while (true) {
              e = random.nextInt(1, phi);
              int commonDenominator = greatestCommonDenominatorChecker.getGreatestCommonDenomimnator(phi, e);
@@ -43,12 +65,6 @@ public class RSA {
                  break;
              }
         }
-
-        int d = inverse.getMultiplicativeInverse();
-
-        Key privateKey = new Key(n, d);
-        Key publicKey = new Key(n, e);
-        this.privateKey = privateKey;
-        this.publicKey = publicKey;
+        return e;
     }
 }
