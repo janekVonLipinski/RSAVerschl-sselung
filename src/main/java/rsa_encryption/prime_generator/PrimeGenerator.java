@@ -1,4 +1,4 @@
-package rsa_encryption.primeGenerator;
+package rsa_encryption.prime_generator;
 
 public interface PrimeGenerator {
 

@@ -1,7 +1,7 @@
-package rsa_encryption.primeGenerator.impl;
+package rsa_encryption.prime_generator.impl;
 
 import org.junit.jupiter.api.Test;
-import rsa_encryption.primeGenerator.PrimeGenerator;
+import rsa_encryption.prime_generator.PrimeGenerator;
 
 import static org.junit.jupiter.api.Assertions.*;
 

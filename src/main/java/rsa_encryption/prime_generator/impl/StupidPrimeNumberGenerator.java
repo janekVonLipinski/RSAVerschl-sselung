@@ -1,9 +1,6 @@
-package rsa_encryption.primeGenerator.impl;
+package rsa_encryption.prime_generator.impl;
 
-import rsa_encryption.primeGenerator.PrimeGenerator;
-
-import java.util.ArrayList;
-import java.util.List;
+import rsa_encryption.prime_generator.PrimeGenerator;
 
 public class StupidPrimeNumberGenerator implements PrimeGenerator {
 
