@@ -2,6 +2,7 @@ package rsa_encryption.encryption;
 
 import rsa_encryption.euclidic_algorithm.GreatestCommonDenominatorChecker;
 import rsa_encryption.euclidic_algorithm.MultiplicativeInverse;
+import rsa_encryption.euclidic_algorithm.impl.EuclidicCommonDenominatorChecker;
 import rsa_encryption.model.Key;
 import rsa_encryption.prime_generator.PrimeGenerator;
 import rsa_encryption.prime_generator.impl.StupidPrimeNumberGenerator;
@@ -12,8 +13,8 @@ public class RSA {
 
     private final Random random = new Random();
     private final PrimeGenerator primeGenerator = new StupidPrimeNumberGenerator();
-    private GreatestCommonDenominatorChecker greatestCommonDenominatorChecker;
-    private MultiplicativeInverse inverse;
+    private final GreatestCommonDenominatorChecker greatestCommonDenominatorChecker = new EuclidicCommonDenominatorChecker();
+    private final MultiplicativeInverse inverse = new EuclidicCommonDenominatorChecker();
     private Key privateKey;
     private Key publicKey;
 
@@ -33,7 +34,7 @@ public class RSA {
         int n = prime1 * prime2;
         int phi = (prime1 - 1) * (prime2 - 1);
         int e = getE(phi);
-        int d = inverse.getMultiplicativeInverse();
+        int d = inverse.getMultiplicativeInverse(e, phi);
 
         Key privateKey = new Key(n, d);
         Key publicKey = new Key(n, e);
