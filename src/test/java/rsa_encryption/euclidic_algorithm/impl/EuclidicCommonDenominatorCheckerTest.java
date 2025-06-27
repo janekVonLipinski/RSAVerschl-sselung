@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class EuclidicCommonDenominatorCheckerTest {
 
-    private final GreatestCommonDenominatorChecker sut = new EuclidicCommonDenominatorChecker();
+    private final EuclidicCommonDenominatorChecker sut = new EuclidicCommonDenominatorChecker();
 
 
     @Test
@@ -16,4 +16,9 @@ class EuclidicCommonDenominatorCheckerTest {
     assertEquals(3, res);
     }
 
+    @Test
+    void givenNumberIsThreeAndModuloNumberIsTwentysix_then_resultIsNine(){
+        int res = sut.getMultiplicativeInverse(3, 26);
+        assertEquals(9, res);
+    }
 }
