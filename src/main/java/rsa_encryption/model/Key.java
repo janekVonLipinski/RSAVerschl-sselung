@@ -4,11 +4,13 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
+import java.math.BigInteger;
+
 @Getter
 @RequiredArgsConstructor
 @ToString
 public class Key {
 
-    private final int n;
-    private final int eOrD;
+    private final BigInteger n;
+    private final BigInteger eOrD;
 }

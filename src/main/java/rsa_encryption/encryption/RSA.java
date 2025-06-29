@@ -7,6 +7,7 @@ import rsa_encryption.model.Key;
 import rsa_encryption.prime_generator.PrimeGenerator;
 import rsa_encryption.prime_generator.impl.StupidPrimeNumberGenerator;
 
+import java.math.BigInteger;
 import java.util.Random;
 
 public class RSA {
@@ -36,25 +37,35 @@ public class RSA {
         int e = getE(phi);
         int d = inverse.getMultiplicativeInverse(e, phi);
 
-        Key privateKey = new Key(n, d);
-        Key publicKey = new Key(n, e);
+        BigInteger nAsBigInt = BigInteger.valueOf(n);
+        BigInteger eAsBigInt = BigInteger.valueOf(e);
+        BigInteger dAsBigInt = BigInteger.valueOf(d);
+
+        Key privateKey = new Key(nAsBigInt, dAsBigInt);
+        Key publicKey = new Key(nAsBigInt, eAsBigInt);
         this.privateKey = privateKey;
         this.publicKey = publicKey;
     }
 
     public int encrypt(int dataToEncrypt) {
-        int n = publicKey.getN();
-        int e = publicKey.getEOrD();
+        BigInteger n = publicKey.getN();
+        BigInteger e = publicKey.getEOrD();
+        BigInteger data = BigInteger.valueOf(dataToEncrypt);
 
-        return (int) Math.pow(dataToEncrypt, e) % n;
+        BigInteger ciphertext = data.modPow(e, n);
+
+        return ciphertext.intValue();
     }
 
-    public int decrypt(int dataToEncrypt) {
-        int n = privateKey.getN();
-        int d = privateKey.getEOrD();
+    public int decrypt(int dataToDecrypt) {
+        BigInteger n = privateKey.getN();
+        BigInteger d = privateKey.getEOrD();
+        BigInteger ciphertext = BigInteger.valueOf(dataToDecrypt);
 
-        return (int) Math.pow(dataToEncrypt, d) % n;
+        BigInteger decrypted = ciphertext.modPow(d, n);
+        return decrypted.intValue();
     }
+
 
     private int getE(int phi) {
         int e;
