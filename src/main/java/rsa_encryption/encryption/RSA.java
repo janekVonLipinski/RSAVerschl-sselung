@@ -2,8 +2,8 @@ package rsa_encryption.encryption;
 
 import rsa_encryption.euclidic_algorithm.GreatestCommonDenominatorChecker;
 import rsa_encryption.euclidic_algorithm.MultiplicativeInverse;
-import rsa_encryption.euclidic_algorithm.impl.EuclidicCommonDenominatorChecker;
-import rsa_encryption.model.Key;
+import rsa_encryption.model.PrivateKey;
+import rsa_encryption.model.PublicKey;
 import rsa_encryption.prime_generator.PrimeGenerator;
 import rsa_encryption.prime_generator.impl.StupidPrimeNumberGenerator;
 
@@ -14,13 +14,20 @@ public class RSA {
 
     private final Random random = new Random();
     private final PrimeGenerator primeGenerator = new StupidPrimeNumberGenerator();
-    private final GreatestCommonDenominatorChecker greatestCommonDenominatorChecker = new EuclidicCommonDenominatorChecker();
-    private final MultiplicativeInverse inverse = new EuclidicCommonDenominatorChecker();
-    private Key privateKey;
-    private Key publicKey;
+    private final GreatestCommonDenominatorChecker greatestCommonDenominatorChecker;
+    private final MultiplicativeInverse inverseGenerator;
+    private PrivateKey privateKey;
+    private PublicKey publicKey;
 
     private static final int MIN_PRIME_NUMBER = 100;
     private static final int MAX_PRIME_NUMBER = 1000;
+
+    public RSA(GreatestCommonDenominatorChecker greatestCommonDenominatorChecker, MultiplicativeInverse inverseGenerator) {
+        this.greatestCommonDenominatorChecker = greatestCommonDenominatorChecker;
+        this.inverseGenerator = inverseGenerator;
+
+        generateKeyPair();
+    }
 
     public void generateKeyPair() {
 
@@ -35,22 +42,22 @@ public class RSA {
         int n = prime1 * prime2;
         int phi = (prime1 - 1) * (prime2 - 1);
         int e = getE(phi);
-        int d = inverse.getMultiplicativeInverse(e, phi);
+        int d = inverseGenerator.getMultiplicativeInverse(e, phi);
 
         BigInteger nAsBigInt = BigInteger.valueOf(n);
         BigInteger eAsBigInt = BigInteger.valueOf(e);
         BigInteger dAsBigInt = BigInteger.valueOf(d);
 
-        Key privateKey = new Key(nAsBigInt, dAsBigInt);
-        Key publicKey = new Key(nAsBigInt, eAsBigInt);
+        PrivateKey privateKey = new PrivateKey(nAsBigInt, dAsBigInt);
+        PublicKey publicKey = new PublicKey(nAsBigInt, eAsBigInt);
         this.privateKey = privateKey;
         this.publicKey = publicKey;
     }
 
-    public int encrypt(int dataToEncrypt) {
+    public int encrypt(int message) {
         BigInteger n = publicKey.getN();
-        BigInteger e = publicKey.getEOrD();
-        BigInteger data = BigInteger.valueOf(dataToEncrypt);
+        BigInteger e = publicKey.getE();
+        BigInteger data = BigInteger.valueOf(message);
 
         BigInteger ciphertext = data.modPow(e, n);
 
@@ -59,7 +66,7 @@ public class RSA {
 
     public int decrypt(int dataToDecrypt) {
         BigInteger n = privateKey.getN();
-        BigInteger d = privateKey.getEOrD();
+        BigInteger d = privateKey.getD();
         BigInteger ciphertext = BigInteger.valueOf(dataToDecrypt);
 
         BigInteger decrypted = ciphertext.modPow(d, n);
@@ -73,7 +80,9 @@ public class RSA {
              e = random.nextInt(1, phi);
              int commonDenominator = greatestCommonDenominatorChecker.getGreatestCommonDenomimnator(phi, e);
 
-             if (commonDenominator == 1) {
+             boolean isECoprimeToPhi = commonDenominator == 1;
+
+             if (isECoprimeToPhi) {
                  break;
              }
         }

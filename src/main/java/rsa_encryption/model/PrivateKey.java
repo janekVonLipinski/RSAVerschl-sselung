@@ -9,8 +9,8 @@ import java.math.BigInteger;
 @Getter
 @RequiredArgsConstructor
 @ToString
-public class Key {
+public class PrivateKey {
 
     private final BigInteger n;
-    private final BigInteger eOrD;
+    private final BigInteger d;
 }
