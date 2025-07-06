@@ -1,7 +1,9 @@
 package rsa_encryption.encryption;
 
-import rsa_encryption.euclidic_algorithm.GreatestCommonDenominatorChecker;
-import rsa_encryption.euclidic_algorithm.MultiplicativeInverse;
+import rsa_encryption.euclidic_algorithm.common_denominator.GreatestCommonDenominatorCalculator;
+import rsa_encryption.euclidic_algorithm.common_denominator.impl.EuclidicCommonDenominatorChecker;
+import rsa_encryption.euclidic_algorithm.multiplicaitve_inverse.MultiplicativeInverseGenerator;
+import rsa_encryption.euclidic_algorithm.multiplicaitve_inverse.impl.MultiplicateInverseCalculator;
 import rsa_encryption.model.PrivateKey;
 import rsa_encryption.model.PublicKey;
 import rsa_encryption.prime_generator.PrimeGenerator;
@@ -14,18 +16,15 @@ public class RSA {
 
     private final Random random = new Random();
     private final PrimeGenerator primeGenerator = new StupidPrimeNumberGenerator();
-    private final GreatestCommonDenominatorChecker greatestCommonDenominatorChecker;
-    private final MultiplicativeInverse inverseGenerator;
+    private final GreatestCommonDenominatorCalculator greatestCommonDenominatorChecker = new EuclidicCommonDenominatorChecker();
+    private final MultiplicativeInverseGenerator inverseGenerator = new MultiplicateInverseCalculator();
     private PrivateKey privateKey;
     private PublicKey publicKey;
 
     private static final int MIN_PRIME_NUMBER = 100;
     private static final int MAX_PRIME_NUMBER = 1000;
 
-    public RSA(GreatestCommonDenominatorChecker greatestCommonDenominatorChecker, MultiplicativeInverse inverseGenerator) {
-        this.greatestCommonDenominatorChecker = greatestCommonDenominatorChecker;
-        this.inverseGenerator = inverseGenerator;
-
+    public RSA() {
         generateKeyPair();
     }
 

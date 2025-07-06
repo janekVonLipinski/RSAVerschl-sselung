@@ -1,13 +1,12 @@
 package rsa_encryption;
 
 import rsa_encryption.encryption.RSA;
-import rsa_encryption.euclidic_algorithm.impl.EuclidicCommonDenominatorChecker;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        RSA rsa = new RSA(new EuclidicCommonDenominatorChecker(), new EuclidicCommonDenominatorChecker());
+        RSA rsa = new RSA();
 
         int message = 8;
         System.out.println("Message is " + message);
